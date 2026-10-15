@@ -5,19 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>moonbitlang.dev</title>
 <meta name="description" content="Small tools for the MoonBit ecosystem, written in MoonBit.">
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="./style.css">
 </head>
 <body>
 <main>
-  <header>
-    <h1>moonbitlang.dev</h1>
-    <p>Small tools for the MoonBit ecosystem, written in MoonBit.</p>
+  <header class="site">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">M</span>
+      <div class="brand-text">
+        <h1>moonbitlang.dev</h1>
+        <p id="tagline" class="tagline">Small tools for the MoonBit ecosystem, written in MoonBit.</p>
+      </div>
+    </div>
+    <nav class="lang" aria-label="Language">
+      <a href="./?lang=zh" data-lang="zh">中文</a><a href="./?lang=en" data-lang="en">EN</a>
+    </nav>
   </header>
-  <section id="modules" aria-label="Modules"></section>
-  <footer>
-    <p>Built with MoonBit. Hosted on Cloudflare Pages.</p>
+
+  <section class="section">
+    <div class="section-head">
+      <h2 id="section-label">Modules</h2>
+      <span id="section-count" class="count"></span>
+    </div>
+    <div id="modules" class="grid"></div>
+  </section>
+
+  <footer class="site-foot">
+    <p id="footer-copy" class="copy">Built with MoonBit. Hosted on Cloudflare Pages.</p>
+    <p class="foot-links">
+      <a href="https://github.com/chenbimo">GitHub</a><span class="dot">·</span><a href="https://mooncakes.io">Mooncakes</a>
+    </p>
   </footer>
 </main>
-<script src="/main.js"></script>
+<script src="./main.js"></script>
 </body>
 </html>
