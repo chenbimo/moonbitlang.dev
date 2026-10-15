@@ -6,6 +6,7 @@ const i18n = {
     count: (n) => `共 ${n} 个`,
     state: { released: '已发布', dev: '开发中', deprecated: '已废弃' },
     corner: { dev: '开发中', deprecated: '已废弃' },
+    theme: '下拉切换主题',
     links: { repo: 'GitHub', docs: '文档' },
     footer: '使用 MoonBit 构建 · 由 Cloudflare Pages 托管。',
   },
@@ -15,6 +16,7 @@ const i18n = {
     count: (n) => `${n} modules`,
     state: { released: 'Released', dev: 'In development', deprecated: 'Deprecated' },
     corner: { dev: 'Dev', deprecated: 'Deprecated' },
+    theme: 'Pull to switch theme',
     links: { repo: 'GitHub', docs: 'Docs' },
     footer: 'Built with MoonBit. Hosted on Cloudflare Pages.',
   },
@@ -100,6 +102,9 @@ function render(lang) {
   document.getElementById('section-label').textContent = t.section;
   document.getElementById('section-count').textContent = t.count(modules.length);
   document.getElementById('footer-copy').textContent = t.footer;
+  const cordEl = document.getElementById('cord');
+  cordEl.title = t.theme;
+  cordEl.setAttribute('aria-label', t.theme);
   document.querySelectorAll('.lang a').forEach((a) => {
     a.classList.toggle('active', a.dataset.lang === lang);
   });
@@ -146,6 +151,77 @@ document.querySelectorAll('.lang a').forEach((a) => {
     e.preventDefault();
     render(a.dataset.lang);
   });
+});
+
+// ── 拉线开关:拖过阈值切主题,松手回弹;短按/键盘也能切 ────────
+const THEME_KEY = 'site-theme';
+const CORD_THRESHOLD = 20;  // 拉过这么多就认作一次切换
+const CORD_MAX = 64;
+
+const cord = document.getElementById('cord');
+let dragging = false;
+let startY = 0;
+let pull = 0;
+let suppressClick = false;
+
+function currentTheme() {
+  const set = document.documentElement.dataset.theme;
+  if (set === 'dark' || set === 'light') return set;
+  return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function applyTheme(theme) {
+  document.documentElement.classList.add('theming');
+  setTimeout(() => document.documentElement.classList.remove('theming'), 260);
+  document.documentElement.dataset.theme = theme;
+  try { localStorage.setItem(THEME_KEY, theme); } catch (e) { /* 隐私模式等场景忽略 */ }
+}
+
+function toggleTheme() {
+  applyTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+}
+
+function setPull(v, animate) {
+  // animate=false 时关掉过渡(拖动跟手);true 时由 CSS 的弹簧曲线回位
+  cord.classList.toggle('pulling', !animate);
+  cord.style.setProperty('--pull', v + 'px');
+}
+
+cord.addEventListener('pointerdown', (e) => {
+  dragging = true;
+  startY = e.clientY;
+  pull = 0;
+  suppressClick = false;
+  try { cord.setPointerCapture(e.pointerId); } catch (err) { /* 合成事件或旧环境忽略 */ }
+  setPull(0, false);
+});
+cord.addEventListener('pointermove', (e) => {
+  if (!dragging) return;
+  pull = Math.max(0, Math.min(CORD_MAX, e.clientY - startY));
+  setPull(pull, false);
+});
+function endPull() {
+  if (!dragging) return;
+  dragging = false;
+  if (pull >= CORD_THRESHOLD) {
+    toggleTheme();
+    suppressClick = true; // 这次切换已由拖拽完成,吞掉随后的 click
+  }
+  setPull(0, true);
+  pull = 0;
+}
+cord.addEventListener('pointerup', endPull);
+cord.addEventListener('pointercancel', endPull);
+cord.addEventListener('click', () => {
+  if (suppressClick) { suppressClick = false; return; }
+  toggleTheme();
+  // 短按/键盘也给一次「拉一下再弹回」的手感
+  cord.classList.add('pulling');
+  cord.style.setProperty('--pull', '14px');
+  setTimeout(() => {
+    cord.classList.remove('pulling');
+    cord.style.setProperty('--pull', '0px');
+  }, 30);
 });
 
 render(pickLang());

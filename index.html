@@ -6,6 +6,13 @@
 <title>moonbitlang.dev</title>
 <meta name="description" content="Small tools for the MoonBit ecosystem, written in MoonBit.">
 <link rel="stylesheet" href="./style.css">
+<script>
+  // 主题偏好在首帧前落定,避免闪白/闪黑
+  try {
+    var t = localStorage.getItem('site-theme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
 </head>
 <body>
 <main>
@@ -17,9 +24,18 @@
         <p id="tagline" class="tagline">Small tools for the MoonBit ecosystem, written in MoonBit.</p>
       </div>
     </div>
-    <nav class="lang" aria-label="Language">
-      <a href="./?lang=zh" data-lang="zh">中文</a><a href="./?lang=en" data-lang="en">EN</a>
-    </nav>
+    <div class="controls">
+      <button id="cord" class="cord" type="button" aria-label="Pull to switch theme" title="Pull to switch theme">
+        <span class="cord-anchor"></span>
+        <span class="cord-wrap">
+          <span class="cord-line"></span>
+          <span class="cord-handle"></span>
+        </span>
+      </button>
+      <nav class="lang" aria-label="Language">
+        <a href="./?lang=zh" data-lang="zh">中文</a><a href="./?lang=en" data-lang="en">EN</a>
+      </nav>
+    </div>
   </header>
 
   <section class="section">

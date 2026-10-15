@@ -7,9 +7,26 @@
   --fill-released: #4c7c63; --fill-dev: #4a76a3; --fill-deprecated: #a9524d;
   --badge-fg: #ffffff;
   --mark-bg: rgba(61, 108, 146, 0.10);
+  --cord-color: #d6d8d4;
+  --handle-hi: #ffffff; --handle-mid: #f3f3f1; --handle-lo: #d9dad7;
+}
+/* 主题由头部拉线开关显式选择并记忆;未选择时跟随系统 */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #131518; --card: #1b1e22; --fg: #e8e8e4; --muted: #9ba3aa; --faint: #79828a;
+  --border: #262a2e; --border-strong: #343a40;
+  --ink: #e8e8e4; --ink-fg: #131518;
+  --link: #85b1d4;
+  --fill-released: #3d6a56; --fill-dev: #436e97; --fill-deprecated: #8b4a46;
+  --badge-fg: #f2f4f5;
+  --mark-bg: rgba(133, 177, 212, 0.14);
+  --cord-color: #4b5257;
+  --handle-hi: #f1f3f4; --handle-mid: #d8dcdf; --handle-lo: #a9b0b5;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --bg: #131518; --card: #1b1e22; --fg: #e8e8e4; --muted: #9ba3aa; --faint: #79828a;
     --border: #262a2e; --border-strong: #343a40;
     --ink: #e8e8e4; --ink-fg: #131518;
@@ -17,6 +34,8 @@
     --fill-released: #3d6a56; --fill-dev: #436e97; --fill-deprecated: #8b4a46;
     --badge-fg: #f2f4f5;
     --mark-bg: rgba(133, 177, 212, 0.14);
+    --cord-color: #4b5257;
+    --handle-hi: #f1f3f4; --handle-mid: #d8dcdf; --handle-lo: #a9b0b5;
   }
 }
 * { box-sizing: border-box; }
@@ -53,6 +72,72 @@ h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.028em; lin
 }
 .lang a:hover { color: var(--fg); }
 .lang a.active { background: var(--ink); color: var(--ink-fg); font-weight: 600; }
+
+/* ── 拉线开关:一截灯绳,下拉切换主题 ─────────── */
+.controls { flex: none; display: flex; align-items: flex-start; gap: 14px; }
+.cord {
+  --pull: 0px; /* 拉距,由 main.js 写入 */
+  position: relative; width: 26px; height: 62px;
+  padding: 0; border: 0; background: transparent;
+  cursor: grab; touch-action: none; /* 触屏下也要连续收到 pointermove */
+}
+.cord:active { cursor: grabbing; }
+.cord:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 6px; }
+
+/* 顶端的固定点:一颗小铆钉 */
+.cord-anchor {
+  position: absolute; left: 50%; top: -3px; width: 8px; height: 8px; margin-left: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 55%), var(--border-strong);
+  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.25);
+}
+
+/* 绳与链:从铆钉处垂下,平时自发轻摆 */
+.cord-wrap {
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+  transform-origin: 50% -3px;
+  animation: cord-sway 6.4s ease-in-out infinite alternate;
+}
+.cord.pulling .cord-wrap { animation-play-state: paused; }
+
+/* 绳:3px 宽,交叉纹理像编织;长度随拉距伸缩 */
+.cord-line {
+  position: absolute; left: 50%; top: 0; width: 3px; height: calc(28px + var(--pull));
+  margin-left: -1.5px; border-radius: 1.5px;
+  background-color: var(--cord-color);
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.5) 0 1.5px, rgba(255, 255, 255, 0) 1.5px 4px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.07) 0 1.5px, rgba(0, 0, 0, 0) 1.5px 4px);
+  transition: height 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 拉手:白色塑料水滴头,绳从顶端穿入 */
+.cord-handle {
+  position: absolute; left: 50%; top: calc(28px + var(--pull));
+  transform: translateX(-50%);
+  width: 13px; height: 22px;
+  background: linear-gradient(100deg, var(--handle-hi) 0%, var(--handle-mid) 38%, var(--handle-lo) 100%);
+  border-radius: 6px 6px 7px 7px / 4px 4px 11px 11px;
+  box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.16);
+  transition: top 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 拖动过程关掉过渡,做到跟手 */
+.cord.pulling .cord-line, .cord.pulling .cord-handle { transition: none; }
+
+@keyframes cord-sway {
+  from { transform: rotate(-1.6deg); }
+  to { transform: rotate(1.6deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cord-wrap { animation: none; }
+  .cord-line, .cord-handle { transition: none; }
+}
+
+/* 切换主题时的过渡:短暂加到全站,240ms 后移除 */
+html.theming, html.theming * {
+  transition: background-color 240ms ease, color 240ms ease, border-color 240ms ease !important;
+}
 
 /* ── 段头 ───────────────────────────────── */
 .section { margin-top: 56px; }
