@@ -3,6 +3,7 @@ const i18n = {
   zh: {
     tagline: 'MoonBit 生态的小而锋利的工具集。',
     section: '模块',
+    featured: '推荐',
     count: (n) => `共 ${n} 个`,
     state: { released: '已发布', dev: '开发中', deprecated: '已废弃' },
     corner: { dev: '开发中', deprecated: '已废弃' },
@@ -13,6 +14,7 @@ const i18n = {
   en: {
     tagline: 'Small tools for the MoonBit ecosystem, written in MoonBit.',
     section: 'Modules',
+    featured: 'Featured',
     count: (n) => `${n} modules`,
     state: { released: 'Released', dev: 'In development', deprecated: 'Deprecated' },
     corner: { dev: 'Dev', deprecated: 'Deprecated' },
@@ -26,7 +28,7 @@ const i18n = {
 // 版本号只出现在已发布模块的角标里；未发布模块的细节写进描述。
 const modules = [
   {
-    name: 'bm2', state: 'released', version: 'v0.6.0',
+    name: 'bm2', state: 'released', version: 'v0.6.0', featured: true,
     description: {
       zh: 'Bun 与 Node.js 的进程管理器：两个静态二进制，不带运行时；监督、日志轮转、通知与自升级由一个守护进程完成。',
       en: 'A lightweight process manager for Bun and Node.js applications, written in MoonBit. Two static binaries, no runtime.',
@@ -99,8 +101,6 @@ function render(lang) {
   const t = i18n[lang];
 
   document.getElementById('tagline').textContent = t.tagline;
-  document.getElementById('section-label').textContent = t.section;
-  document.getElementById('section-count').textContent = t.count(modules.length);
   document.getElementById('footer-copy').textContent = t.footer;
   const cordEl = document.getElementById('cord');
   cordEl.title = t.theme;
@@ -109,41 +109,71 @@ function render(lang) {
     a.classList.toggle('active', a.dataset.lang === lang);
   });
 
-  const grid = document.getElementById('modules');
-  grid.textContent = '';
-  for (const m of modules) {
-    const card = document.createElement('article');
-    card.className = 'card';
-
-    const badge = document.createElement('span');
-    badge.className = 'badge ' + STATE_CLASS[m.state];
-    const label = document.createElement('i');
-    // 已发布只显示版本号；开发中/已废弃在角标里显示状态短词。
-    label.textContent = m.version ? m.version : t.corner[m.state];
-    badge.append(label);
-    card.append(badge);
-
-    const name = document.createElement('h3');
-    name.textContent = m.name;
-    card.append(name);
-
-    const desc = document.createElement('p');
-    desc.className = 'desc';
-    desc.textContent = m.description[lang];
-    card.append(desc);
-
-    const links = document.createElement('div');
-    links.className = 'links';
-    links.append(linkItem(m.repo, t.links.repo));
-    if (m.docs) {
-      links.append(sep('·'), linkItem(m.docs, t.links.docs));
-    }
-    card.append(links);
-
-    grid.append(card);
-  }
+  // 推荐段在前,其余模块在后;两段各带计数
+  const sections = document.getElementById('sections');
+  sections.textContent = '';
+  const featured = modules.filter((m) => m.featured);
+  const rest = modules.filter((m) => !m.featured);
+  if (featured.length > 0) sections.append(buildSection(t.featured, featured, lang));
+  if (rest.length > 0) sections.append(buildSection(t.section, rest, lang));
 
   history.replaceState(null, '', lang === 'en' ? '?lang=en' : location.pathname);
+}
+
+function buildSection(labelText, list, lang) {
+  const t = i18n[lang];
+  const section = document.createElement('section');
+  section.className = 'section';
+
+  const head = document.createElement('div');
+  head.className = 'section-head';
+  const label = document.createElement('h2');
+  label.textContent = labelText;
+  const count = document.createElement('span');
+  count.className = 'count';
+  count.textContent = t.count(list.length);
+  head.append(label, count);
+  section.append(head);
+
+  const grid = document.createElement('div');
+  grid.className = 'grid';
+  for (const m of list) grid.append(buildCard(m, lang));
+  section.append(grid);
+
+  return section;
+}
+
+function buildCard(m, lang) {
+  const t = i18n[lang];
+  const card = document.createElement('article');
+  card.className = 'card';
+
+  const badge = document.createElement('span');
+  badge.className = 'badge ' + STATE_CLASS[m.state];
+  const label = document.createElement('i');
+  // 已发布只显示版本号；开发中/已废弃在角标里显示状态短词。
+  label.textContent = m.version ? m.version : t.corner[m.state];
+  badge.append(label);
+  card.append(badge);
+
+  const name = document.createElement('h3');
+  name.textContent = m.name;
+  card.append(name);
+
+  const desc = document.createElement('p');
+  desc.className = 'desc';
+  desc.textContent = m.description[lang];
+  card.append(desc);
+
+  const links = document.createElement('div');
+  links.className = 'links';
+  links.append(linkItem(m.repo, t.links.repo));
+  if (m.docs) {
+    links.append(sep('·'), linkItem(m.docs, t.links.docs));
+  }
+  card.append(links);
+
+  return card;
 }
 
 document.querySelectorAll('.lang a').forEach((a) => {

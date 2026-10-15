@@ -18,13 +18,15 @@
 
 状态只有三档:已发布 / 开发中 / 已废弃;角标是卡片右上角一条 45° 斜置缎带(两端由卡片圆角裁口),底色随状态(柔和绿 / 柔和蓝 / 柔和红,中调低饱和,不亮也不深);已发布模块的角标只显示版本号,开发中与已废弃显示状态短词。
 
-| 模块 | 状态 | 版本 | docs 链接 |
-| --- | --- | --- | --- |
-| `bm2` | 已发布 / Released | `v0.6.0` | `https://bm2.moonbitlang.dev` |
-| `clitable` | 已发布 / Released | `v0.2.0` | `https://clitable.moonbitlang.dev` |
-| `clicolor` | 开发中 / In development | — | 无 |
-| `dateku` | 开发中 / In development | — | 无 |
-| `fndash` | 开发中 / In development | — | 无 |
+推荐由数据里的 `featured: true` 标记:带标记的进页首「推荐 / Featured」段,其余进「模块 / Modules」段,两段各带计数。
+
+| 模块 | 状态 | 版本 | 推荐 | docs 链接 |
+| --- | --- | --- | --- | --- |
+| `bm2` | 已发布 / Released | `v0.6.0` | 是 | `https://bm2.moonbitlang.dev` |
+| `clitable` | 已发布 / Released | `v0.2.0` | — | `https://clitable.moonbitlang.dev` |
+| `clicolor` | 开发中 / In development | — | — | 无 |
+| `dateku` | 开发中 / In development | — | — | 无 |
+| `fndash` | 开发中 / In development | — | — | 无 |
 
 描述要从各模块 `moon.mod` / README 摘事实:`clicolor` 的描述取自其 README(终端颜色与超链接转义序列库);`dateku` 与 `fndash` 的描述保留「方向未定」的诚实说明。
 
