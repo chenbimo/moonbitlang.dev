@@ -1,0 +1,43 @@
+/* moonbitlang.dev — plain, no dependencies. Light by default, dark via prefers-color-scheme. */
+:root {
+  color-scheme: light dark;
+  --bg: #fbfbfa;
+  --fg: #1e2328;
+  --muted: #6b7280;
+  --border: #e3e3dd;
+  --card: #ffffff;
+  --link: #3f6a8c;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17191b;
+    --fg: #e6e6e3;
+    --muted: #9aa0a6;
+    --border: #292c2f;
+    --card: #1e2125;
+    --link: #7fa8c9;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+main { max-width: 720px; margin: 0 auto; padding: 48px 20px 64px; }
+header h1 { margin: 0; font-size: 28px; letter-spacing: -0.02em; }
+header p { margin: 8px 0 40px; color: var(--muted); }
+#modules { display: grid; gap: 16px; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+.card h2 { margin: 0 0 6px; font-size: 17px; letter-spacing: -0.01em; }
+.card p { margin: 0 0 10px; }
+.card .links { margin: 0; font-size: 14px; color: var(--muted); }
+.card a { color: var(--link); text-decoration: none; }
+.card a:hover { text-decoration: underline; }
+footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
