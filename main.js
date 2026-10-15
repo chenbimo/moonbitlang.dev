@@ -11,6 +11,7 @@ const modules = [
     name: 'clitable',
     description: 'Unicode tables for the command line, designed for MoonBit.',
     repo: 'https://github.com/chenbimo/clitable',
+    docs: 'https://clitable.moonbitlang.dev',
   },
 ];
 
