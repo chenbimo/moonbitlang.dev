@@ -6,7 +6,6 @@
   --link: #3d6c92;
   --fill-released: #4c7c63; --fill-dev: #4a76a3; --fill-deprecated: #a9524d;
   --badge-fg: #ffffff;
-  --mark-bg: rgba(61, 108, 146, 0.10);
   --cord-color: #d6d8d4;
   --handle-hi: #ffffff; --handle-mid: #f3f3f1; --handle-lo: #d9dad7;
 }
@@ -20,7 +19,6 @@
   --link: #85b1d4;
   --fill-released: #3d6a56; --fill-dev: #436e97; --fill-deprecated: #8b4a46;
   --badge-fg: #f2f4f5;
-  --mark-bg: rgba(133, 177, 212, 0.14);
   --cord-color: #4b5257;
   --handle-hi: #f1f3f4; --handle-mid: #d8dcdf; --handle-lo: #a9b0b5;
 }
@@ -33,7 +31,6 @@
     --link: #85b1d4;
     --fill-released: #3d6a56; --fill-dev: #436e97; --fill-deprecated: #8b4a46;
     --badge-fg: #f2f4f5;
-    --mark-bg: rgba(133, 177, 212, 0.14);
     --cord-color: #4b5257;
     --handle-hi: #f1f3f4; --handle-mid: #d8dcdf; --handle-lo: #a9b0b5;
   }
@@ -51,12 +48,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 48px 24px 56px; }
 /* ── 品牌区 ─────────────────────────────── */
 .site { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
 .brand { display: flex; align-items: flex-start; gap: 14px; }
-.mark {
-  flex: none; width: 40px; height: 40px; margin-top: 3px;
-  display: grid; place-items: center;
-  background: var(--mark-bg); color: var(--link);
-  border-radius: 11px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em;
-}
+.mark { flex: none; display: block; width: 40px; height: 40px; margin-top: 2px; }
 h1 { margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.028em; line-height: 1.2; }
 .tagline { margin: 4px 0 0; color: var(--muted); font-size: 14.5px; }
 
@@ -199,7 +191,11 @@ html.theming, html.theming * {
   display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
   margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--border);
 }
-.copy { margin: 0; color: var(--faint); font-size: 13px; }
+.mark-sm { flex: none; width: 15px; height: 15px; color: var(--faint); }
+.copy {
+  display: flex; align-items: center; gap: 7px;
+  margin: 0; color: var(--faint); font-size: 13px;
+}
 .foot-links { margin: 0; font-size: 13px; white-space: nowrap; }
 .foot-links .dot { margin: 0 7px; }
 .foot-links a { color: var(--muted); text-decoration: none; }
