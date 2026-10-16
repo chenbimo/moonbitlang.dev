@@ -258,3 +258,77 @@ cord.addEventListener('click', () => {
 });
 
 render(pickLang());
+
+// ── 在线上报：接入 yicode 统一统计。契约在 befly-shared/specs/report-spec.md；
+// 实现参考 befly-shared/utils/reportClient.js + reportSetup.js —— 门户零依赖，
+// 这里按同一协议写一份消费端精简版，只发在线（不报错误，无运行时面可报），改协议先改那边。
+const REPORT_URL = 'https://api.yicode.tech/api/core/tongJi/reportOnline';
+const REPORT_BEAT_MS = 30 * 60 * 1000;
+
+function reportClientId() {
+  // 与 befly-shared/utils/clientId.js 同键名同算法：密码学随机 10 位 hex，localStorage 持久化。
+  try {
+    const stored = localStorage.getItem('befly-client-id');
+    if (stored) return stored;
+    const id = (crypto.randomUUID ? crypto.randomUUID().replaceAll('-', '') : String(Date.now())).slice(0, 10);
+    localStorage.setItem('befly-client-id', id);
+    return id;
+  } catch (e) { /* localStorage 不可用（隐私模式）：每次访问独立标识，仍可计数 */ }
+  return (crypto.randomUUID ? crypto.randomUUID().replaceAll('-', '') : String(Date.now())).slice(0, 10);
+}
+
+function reportEnv() {
+  // 精简 UA 识别：主四大浏览器取名+版本，平台键取小写系统名（映射表同 befly-shared 的口径）。
+  const ua = navigator.userAgent;
+  const pick = (re) => (re.exec(ua) || [])[1] || '';
+  const browserName = (() => {
+    if (/Edg\//.test(ua)) return 'Edge';
+    if (/OPR\//.test(ua)) return 'Opera';
+    if (/Firefox\//.test(ua)) return 'Firefox';
+    if (/Chrome\//.test(ua) && !/Edg\//.test(ua)) return 'Chrome';
+    if (/Safari\//.test(ua) && /Version\//.test(ua)) return 'Safari';
+    return 'Other';
+  })();
+  const clientVersion = (browserName + ' ' + pick(/(?:Edg|OPR|Firefox|Chrome|Version)\/([\d.]+)/)).trim();
+  const os = (() => {
+    if (/Windows/.test(ua)) return 'windows';
+    if (/Mac OS/.test(ua)) return 'macos';
+    if (/Android/.test(ua)) return 'android';
+    if (/iPhone|iPad|iOS/.test(ua)) return 'ios';
+    if (/Linux/.test(ua)) return 'linux';
+    return 'unknown';
+  })();
+  return { clientVersion: clientVersion, systemName: os || 'unknown' };
+}
+
+function localDate(ts) {
+  const d = new Date(ts);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+let reportDate = '';
+
+function sendOnline() {
+  // 启动一条 + 跨天补一条：同一天重复上报也没关系，服务端按（日期×成员）upsert 幂等。
+  const date = localDate(Date.now());
+  if (date === reportDate) return;
+  reportDate = date;
+  const env = reportEnv();
+  fetch(REPORT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    keepalive: true,
+    body: JSON.stringify({
+      productCode: 'webMoonkit',
+      productName: 'Moonkit',
+      productVersion: '1.0.0',
+      productType: 'browser',
+      clientId: reportClientId(),
+      clientVersion: env.clientVersion,
+      systemName: env.systemName,
+    }),
+  }).catch(() => { /* 遥测失败即放弃，不打扰访客 */ });
+}
+
+sendOnline();
+setInterval(sendOnline, REPORT_BEAT_MS);
