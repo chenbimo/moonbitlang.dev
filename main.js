@@ -1,7 +1,7 @@
-// moonbitlang.dev — 门户数据与渲染。零依赖；文案双语，数据一源（main.js）。
+// Moonkit — MoonBit 生态门户。零依赖；文案双语，数据一源（main.js）。
 const i18n = {
   zh: {
-    tagline: 'MoonBit 生态的小而锋利的工具集。',
+    tagline: 'MoonBit 生态的小而锋利的工具集',
     section: '模块',
     featured: '推荐',
     count: (n) => `共 ${n} 个`,

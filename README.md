@@ -1,4 +1,6 @@
-# moonbitlang.dev 官方门户
+# Moonkit — MoonBit 官方门户
+
+站点名 Moonkit，域名 moonbitlang.dev（部署载体，不对外当站名用）。
 
 所有模块的集中展示站点:纯 `index.html` + `style.css` + `main.js`,零构建零依赖,托管在 Cloudflare Pages 项目 `moonbit-site`,自定义域 `moonbitlang.dev`(apex)。
 

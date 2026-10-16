@@ -1,4 +1,6 @@
-# site 仓库约定(moonbitlang.dev 官方门户)
+# site 仓库约定(Moonkit — moonbitlang.dev 官方门户)
+
+站点名 **Moonkit**;域名 `moonbitlang.dev` 只是部署载体,不对外当站名用(`<title>`、`<h1>` 用 Moonkit,URL 与 docs 子域仍指向域名)。
 
 纯静态单页:`index.html` + `style.css` + `main.js`,零构建、零依赖。
 部署:CF Pages 项目 `moonbit-site` + 自定义域 `moonbitlang.dev`,推送即自动重建(监听路径 `*`)。
