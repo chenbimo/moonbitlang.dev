@@ -26,9 +26,9 @@
 | --- | --- | --- | --- | --- |
 | `bm2` | 已发布 / Released | `v0.6.0` | 是 | `https://bm2.moonbitlang.dev` |
 | `clitable` | 已发布 / Released | `v0.2.0` | — | `https://clitable.moonbitlang.dev` |
-| `clicolor` | 开发中 / In development | — | — | 无 |
-| `dateku` | 开发中 / In development | — | — | 无 |
-| `fndash` | 开发中 / In development | — | — | 无 |
+| `clicolor` | 开发中 / In development | — | — | `https://clicolor.moonbitlang.dev` |
+| `dateku` | 开发中 / In development | — | — | `https://dateku.moonbitlang.dev` |
+| `fndash` | 开发中 / In development | — | — | `https://fndash.moonbitlang.dev` |
 
 描述要从各模块 `moon.mod` / README 摘事实:`clicolor` 的描述取自其 README(终端颜色与超链接转义序列库);`dateku` 与 `fndash` 的描述保留「方向未定」的诚实说明。
 

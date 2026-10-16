@@ -52,6 +52,7 @@ const modules = [
       en: 'ANSI color and hyperlink escape-sequence library: immutable Style values assembled by chaining, with bad colors degrading safely.',
     },
     repo: 'https://github.com/chenbimo/clicolor',
+    docs: 'https://clicolor.moonbitlang.dev',
   },
   {
     name: 'dateku', state: 'dev',
@@ -60,6 +61,7 @@ const modules = [
       en: 'Direction undecided; minimal workspace-conformant skeleton with no business features.',
     },
     repo: 'https://github.com/chenbimo/dateku',
+    docs: 'https://dateku.moonbitlang.dev',
   },
   {
     name: 'fndash', state: 'dev',
@@ -68,6 +70,7 @@ const modules = [
       en: 'Direction undecided.',
     },
     repo: 'https://github.com/chenbimo/fndash',
+    docs: 'https://fndash.moonbitlang.dev',
   },
 ];
 
