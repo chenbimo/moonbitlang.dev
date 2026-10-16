@@ -47,10 +47,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 48px 24px 56px; }
 
 /* ── 品牌区 ─────────────────────────────── */
 .site { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
-.brand { display: flex; align-items: flex-start; gap: 14px; }
-.mark { flex: none; display: block; width: 40px; height: 40px; margin-top: 2px; }
+/* Logo 与标题同行,tagline 折行后左对齐到 Logo */
+.brand { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 14px; }
+.mark { flex: none; display: block; width: 40px; height: 40px; transform: translateY(6px); /* SVG 画布底部留白,光学上让兔身贴住基线 */ }
 h1 { margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.028em; line-height: 1.2; }
-.tagline { margin: 4px 0 0; color: var(--muted); font-size: 14.5px; }
+.tagline { flex-basis: 100%; margin: 6px 0 0; color: var(--muted); font-size: 14.5px; }
 
 /* ── 分段式语言切换 ─────────────────────── */
 .lang {
