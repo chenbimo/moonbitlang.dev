@@ -1,3 +1,5 @@
+/* Moonkit 全局样式:主题令牌与页面骨架。组件相关样式在各自 .vue 的 scoped 块里。 */
+
 :root {
   color-scheme: light dark;
   --bg: #f7f7f5; --card: #ffffff; --fg: #1f242a; --muted: #6c747c; --faint: #9aa1a8;
@@ -66,66 +68,8 @@ h1 { margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.028em; lin
 .lang a:hover { color: var(--fg); }
 .lang a.active { background: var(--ink); color: var(--ink-fg); font-weight: 600; }
 
-/* ── 拉线开关:一截灯绳,下拉切换主题 ─────────── */
+/* ── 拉线开关配色 ───────────────────────── */
 .controls { flex: none; display: flex; align-items: flex-start; gap: 14px; }
-.cord {
-  --pull: 0px; /* 拉距,由 main.js 写入 */
-  position: relative; width: 26px; height: 62px;
-  padding: 0; border: 0; background: transparent;
-  cursor: grab; touch-action: none; /* 触屏下也要连续收到 pointermove */
-}
-.cord:active { cursor: grabbing; }
-.cord:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 6px; }
-
-/* 顶端的固定点:一颗小铆钉 */
-.cord-anchor {
-  position: absolute; left: 50%; top: -3px; width: 8px; height: 8px; margin-left: -4px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 55%), var(--border-strong);
-  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.25);
-}
-
-/* 绳与链:从铆钉处垂下,平时自发轻摆 */
-.cord-wrap {
-  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
-  transform-origin: 50% -3px;
-  animation: cord-sway 6.4s ease-in-out infinite alternate;
-}
-.cord.pulling .cord-wrap { animation-play-state: paused; }
-
-/* 绳:3px 宽,交叉纹理像编织;长度随拉距伸缩 */
-.cord-line {
-  position: absolute; left: 50%; top: 0; width: 3px; height: calc(28px + var(--pull));
-  margin-left: -1.5px; border-radius: 1.5px;
-  background-color: var(--cord-color);
-  background-image:
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.5) 0 1.5px, rgba(255, 255, 255, 0) 1.5px 4px),
-    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.07) 0 1.5px, rgba(0, 0, 0, 0) 1.5px 4px);
-  transition: height 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* 拉手:白色塑料水滴头,绳从顶端穿入 */
-.cord-handle {
-  position: absolute; left: 50%; top: calc(28px + var(--pull));
-  transform: translateX(-50%);
-  width: 13px; height: 22px;
-  background: linear-gradient(100deg, var(--handle-hi) 0%, var(--handle-mid) 38%, var(--handle-lo) 100%);
-  border-radius: 6px 6px 7px 7px / 4px 4px 11px 11px;
-  box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.16);
-  transition: top 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* 拖动过程关掉过渡,做到跟手 */
-.cord.pulling .cord-line, .cord.pulling .cord-handle { transition: none; }
-
-@keyframes cord-sway {
-  from { transform: rotate(-1.6deg); }
-  to { transform: rotate(1.6deg); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cord-wrap { animation: none; }
-  .cord-line, .cord-handle { transition: none; }
-}
 
 /* 切换主题时的过渡:短暂加到全站,240ms 后移除 */
 html.theming, html.theming * {
@@ -147,45 +91,6 @@ html.theming, html.theming * {
 
 /* ── 卡片网格 ───────────────────────────── */
 .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
-.card {
-  position: relative; overflow: hidden;
-  display: flex; flex-direction: column;
-  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-  padding: 16px 18px 12px;
-  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
-}
-.card:hover {
-  border-color: var(--border-strong);
-  transform: translateY(-1px);
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.05);
-}
-.card h3 { margin: 0; padding-right: 64px; font-size: 16.5px; font-weight: 650; letter-spacing: -0.012em; }
-
-/* 角标:卡片右上角一条 45° 斜置缎带,两端由卡片圆角裁掉;底色随状态 */
-.badge { position: absolute; top: 26px; right: -42px; pointer-events: none; }
-.badge i {
-  display: block; width: 142px; padding: 5px 0;
-  transform: rotate(45deg); transform-origin: center;
-  text-align: center;
-  font-style: normal; font-size: 11px; font-weight: 700;
-  letter-spacing: 0.07em; white-space: nowrap;
-  color: var(--badge-fg);
-  background: var(--fill-released);
-}
-.badge.st-dev i { background: var(--fill-dev); }
-.badge.st-deprecated i { background: var(--fill-deprecated); font-size: 10px; }
-
-/* 描述最多两行,超出省略;两行高度撑住卡片,链接始终贴底 */
-.desc {
-  flex: 1 1 auto;
-  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2;
-  overflow: hidden;
-  margin: 7px 44px 10px 0; font-size: 13.5px; line-height: 1.55; color: var(--fg); opacity: 0.92;
-}
-.links { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-.links a { color: var(--link); text-decoration: none; }
-.links a:hover { text-decoration: underline; }
-.dot { color: var(--faint); }
 
 /* ── 页脚 ───────────────────────────────── */
 .site-foot {

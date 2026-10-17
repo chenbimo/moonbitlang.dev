@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Moonkit — MoonBit 工具集</title>
 <meta name="description" content="Moonkit：MoonBit 生态的小而锋利的工具集。">
-<link rel="stylesheet" href="./style.css">
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 <link rel="icon" href="./icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="./icons/favicon-16.png" sizes="16x16" type="image/png">
@@ -19,45 +18,7 @@
 </script>
 </head>
 <body>
-<main>
-  <header class="site">
-    <div class="brand">
-      <img class="mark" src="./logo.svg" alt="" width="40" height="40">
-      <h1>Moonkit</h1>
-      <p id="tagline" class="tagline">Small tools for the MoonBit ecosystem, written in MoonBit.</p>
-    </div>
-    <div class="controls">
-      <button id="cord" class="cord" type="button" aria-label="Pull to switch theme" title="Pull to switch theme">
-        <span class="cord-anchor"></span>
-        <span class="cord-wrap">
-          <span class="cord-line"></span>
-          <span class="cord-handle"></span>
-        </span>
-      </button>
-      <nav class="lang" aria-label="Language">
-        <a href="./?lang=zh" data-lang="zh">中文</a><a href="./?lang=en" data-lang="en">EN</a>
-      </nav>
-    </div>
-  </header>
-
-  <div id="sections"></div>
-
-  <footer class="site-foot">
-    <p class="copy">
-      <svg class="mark-sm" viewBox="0 0 64 64" aria-hidden="true">
-        <g transform="translate(-8.348 -16.165) scale(1.2609)">
-          <path d="M26 38.5 Q34.62 26.53 21.2 20.4 Q12.58 32.37 26 38.5 Z" fill="currentColor"/>
-          <path d="M37.2 38.5 C34.6 33 34.4 26.5 37.8 20.8 C41.6 20.6 47.4 21.6 50.8 24.2 C53.6 26.2 53.8 29 51.2 29.8 C49.4 30.3 47.6 29.4 46.4 27.8 C44.6 29.6 43.9 33.2 43.9 38.5 Z" fill="currentColor"/>
-          <path d="M9 56 A23 23 0 0 1 55 56 Z" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="footer-copy">Built with MoonBit. Hosted on Cloudflare Pages.</span>
-    </p>
-    <p class="foot-links">
-      <a href="https://github.com/chenbimo">GitHub</a><span class="dot">·</span><a href="https://mooncakes.io">Mooncakes</a>
-    </p>
-  </footer>
-</main>
-<script src="./main.js"></script>
+  <div id="app"></div>
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>

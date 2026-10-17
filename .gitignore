@@ -6,3 +6,9 @@
 *.key
 *.pem
 .temp/
+node_modules
+
+# 构建产物(Vite,产物在 dist/,一律不入库)
+node_modules/
+dist/
+.temp/

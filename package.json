@@ -1,0 +1,19 @@
+{
+    "name": "moonkit-portal",
+    "version": "1.0.0",
+    "description": "Moonkit — moonbitlang.dev 官方门户（Vue + Vite 构建，产物相对路径）",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "vue": "^3.5.44"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^6.0.10",
+        "sass-embedded": "^1.105.2",
+        "vite": "^8.3.4"
+    }
+}
